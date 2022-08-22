@@ -10,7 +10,7 @@ that allows you to <b>quickly</b> and <b>easily</b> write data to a file
 <h2>Installing</h2>
 
 <pre lang="bash">
-pip3 install lightdb
+pip install git+https://github.com/9bany/LightDB.git
 </pre>
 
 
