@@ -1,5 +1,4 @@
 """The main file for the LightDB project.
-
 :copyright: (c) 2021-2022 by Fl1yd.
 :license: MIT, see LICENSE for more details.
 """
@@ -13,9 +12,7 @@ from typing import Union, Dict
 class LightDB(dict):
     """Light DataBase
     ~~~~~~~~~~~~~~
-
     `SET` method usage:
-
         >>> from lightdb import LightDB
         >>> db = LightDB("/path/to/file.json")  # or a non-existent file, it will be created automatically
         >>> data = {
@@ -32,9 +29,7 @@ class LightDB(dict):
         >>> data = ["value4", "value5"]
         >>> db.set("key4", data)
         True
-
     ... or `GET`:
-
         >>> db.get("key3")
         {"key1": "value1", "key2": ["value2", "value3"]}
         >>> db.get("key4")
@@ -43,11 +38,9 @@ class LightDB(dict):
 
     def __init__(self, location: str) -> None:
         """Initialize the LightDB object
-
         Params:
             location (``str``):
                 The location of the database file
-
         Returns:
             None
         """
@@ -60,43 +53,42 @@ class LightDB(dict):
 
     def _load(self) -> Dict[str, Union[str, int, float, list, dict]]:
         """Load the data from a file
-
         Returns:
             The data from the file
         """
+        f = open(self.location, "r", encoding="utf-8")
+        result = json.load(f)
+        f.close()
         return (
-            json.load(open(self.location, "r", encoding="utf-8"))
+            result
             if os.path.exists(self.location)
             else {}
         )
 
     def save(self) -> bool:
         """Save the current data to a file
-
         Returns:
             bool
         """
+        f = open(self.location, "w+", encoding="utf-8")
         json.dump(
-            self, open(self.location, "w+", encoding="utf-8"),
+            self, f,
             ensure_ascii=False, indent=4
         )
+        f.close()
         return True
 
     def set(
         self, key: str, value: Union[str, int, float, list, dict]
     ) -> bool:
         """LightDB `SET` method
-
         Params:
             key (``str``):
                 The keyname of the item you want to set
-
             value (``str`` | ``int`` | ``float`` | ``list`` | ``dict``):
                 The value of the item you want to set
-
         Returns:
             bool
-
         Usage:
             >>> data = {
                     "key1": "value1",
@@ -115,17 +107,13 @@ class LightDB(dict):
         self, key: str, default: Union[str, int, float, list, dict] = None
     ) -> Dict[str, Union[str, int, float, list, dict]]:
         """LightDB `GET` method
-
         Params:
             key (``str``):
                 The keyname of the item you want to get
-
             default (``str`` | ``int`` | ``float`` | ``list`` | ``dict``, optional):
                 The default value if the key doesn't exist
-
         Returns:
             The value of the item with the specified key
-
         Usage:
             >>> result = db.get("key3")
             >>> result
@@ -140,14 +128,11 @@ class LightDB(dict):
         self, key: str
     ) -> Dict[str, Union[str, int, float, list, dict]]:
         """LightDB `POP` method
-
         Params:
             key (``str``):
                 The keyname of the item you want to pop
-
         Returns:
             The value of the item with the specified key
-
         Usage:
             >>> db.pop("key1")
             {"key1": "value1", "key2": ["value2", "value3"]}
@@ -161,20 +146,15 @@ class LightDB(dict):
         self, name: str, key: str, value: Union[str, int, float, list, dict]
     ) -> bool:
         """Set a key from a specific item
-
         Params:
             name (``str``):
                 The name of the item
-
             key (``str``):
                 The keyname of the item you want to set
-
             value (``str`` | ``int`` | ``float`` | ``list`` | ``dict``):
                 The value of the item you want to set
-
         Returns:
             bool
-
         Usage:
             >>> data = {
                     "key1": "value1",
@@ -197,20 +177,15 @@ class LightDB(dict):
         self, name: str, key: str, default: Union[str, int, float, list, dict] = None
     ) -> Dict[str, Union[str, int, float, list, dict]]:
         """Get a key from a specific item
-
         Params:
             name (``str``):
                 The name of the item
-
             key (``str``):
                 The keyname of the item you want to get
-
             default (``str`` | ``int`` | ``float`` | ``list`` | ``dict``, optional):
                 The default value if the key doesn't exist
-
         Returns:
             The value of the item with the specified key
-
         Usage:
             >>> result = db.get_key("key3", "key2")
             >>> result
@@ -222,17 +197,13 @@ class LightDB(dict):
         self, name: str, key: str
     ) -> Dict[str, Union[str, int, float, list, dict]]:
         """Pop a key from a specific item
-
         Params:
             name (``str``):
                 The name of the item
-
             key (``str``):
                 The keyname of the item you want to pop
-
         Returns:
             The value of the item with the specified key
-
         Usage:
             >>> db.pop_key("key3", "key2")
             ["value2", "value3"]
